@@ -15,8 +15,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3  # Utilise la version 3 de l'action checkout, assurée compatible avec Node.js 20
 
-    - name: Set up Python
-      uses: actions/setup-python@v3  # Utilise la version 3 de l'action setup-python, assurée compatible avec Node.js 20
+    - name: action-latest-release-version
+      uses: reloc8/action-latest-release-version@v1.0.0 
       with:
         python-version: '3.9'  # Spécifie la version de Python à utiliser
 
