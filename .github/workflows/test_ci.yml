@@ -1,26 +1,26 @@
 name: CI
 
+# Définit sur quels événements le workflow sera déclenché
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]  # Exécuter sur des commits poussés vers la branche main
   pull_request:
-    branches:
-      - main
+    branches: [ main ]  # Exécuter sur les pull requests vers la branche main
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest
-      - name: Run tests
-        run: pytest
+    runs-on: ubuntu-latest  # Spécifie que le job s'exécute sur la dernière version Ubuntu disponible
 
+    steps:
+    - uses: actions/checkout@v3  # Utilise la version 3 de checkout
+    - uses: actions/setup-python@v3  # Utilise la version 3 de setup-python
+      with:
+        python-version: '3.9'  # Spécifie la version de Python à utiliser
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip  # Met à jour pip
+        pip install pytest  # Installe pytest pour les tests unitaires
+
+    - name: Run tests
+      run: pytest  # Exécute les tests unitaires avec pytest
