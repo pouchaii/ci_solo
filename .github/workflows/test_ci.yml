@@ -1,26 +1,29 @@
 name: CI
 
-# Définit sur quels événements le workflow sera déclenché
+# Déclencheurs pour le workflow: exécuté sur les pushs et pull requests sur la branche principale
 on:
   push:
-    branches: [ main ]  # Exécuter sur des commits poussés vers la branche main
+    branches: [ main ]  # Exécute le workflow pour les commits sur la branche 'main'
   pull_request:
-    branches: [ main ]  # Exécuter sur les pull requests vers la branche main
+    branches: [ main ]  # Exécute le workflow pour les pull requests vers la branche 'main'
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Spécifie que le job s'exécute sur la dernière version Ubuntu disponible
+    runs-on: ubuntu-latest  # Utilise la dernière version d'Ubuntu disponible sur GitHub Actions
 
     steps:
-    - uses: actions/checkout@v3  # Utilise la version 3 de checkout
-    - uses: actions/setup-python@v3  # Utilise la version 3 de setup-python
+    - name: Checkout code
+      uses: actions/checkout@v3  # Utilise la version 3 de l'action checkout, assurée compatible avec Node.js 20
+
+    - name: Set up Python
+      uses: actions/setup-python@v3  # Utilise la version 3 de l'action setup-python, assurée compatible avec Node.js 20
       with:
         python-version: '3.9'  # Spécifie la version de Python à utiliser
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip  # Met à jour pip
-        pip install pytest  # Installe pytest pour les tests unitaires
+        pip install pytest  # Installe pytest pour les tests
 
     - name: Run tests
       run: pytest  # Exécute les tests unitaires avec pytest
