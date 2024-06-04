@@ -1,29 +1,27 @@
-name: CI
+name: CI/CD Workflow
 
-# Déclencheurs pour le workflow: exécuté sur les pushs et pull requests sur la branche principale
 on:
   push:
-    branches: [ main ]  # Exécute le workflow pour les commits sur la branche 'main'
-  pull_request:
-    branches: [ main ]  # Exécute le workflow pour les pull requests vers la branche 'main'
+    branches:
+      - main  # Spécifie que le workflow doit s'exécuter uniquement sur les push vers la branche 'main'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest  # Utilise la dernière version d'Ubuntu disponible sur GitHub Actions
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Spécifie que le job doit s'exécuter sur la dernière version d'Ubuntu
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Utilise la version 3 de l'action checkout, assurée compatible avec Node.js 20
+      - name: Checkout code
+        uses: actions/checkout@v3  # Utilise la dernière version stable de l'action checkout
 
-    - name: action-latest-release-version
-      uses: reloc8/action-latest-release-version@v1.0.0 
-      with:
-        python-version: '3.9'  # Spécifie la version de Python à utiliser
+      - name: Fetch latest release version
+        id: latest-release  # Identifie cette étape pour que ses sorties puissent être utilisées plus tard
+        uses: reloc8/action-latest-release-version@1.0.0  # Utilise la version spécifiée de l'action pour récupérer la dernière version publiée
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip  # Met à jour pip
-        pip install pytest  # Installe pytest pour les tests
+      - name: Print the latest release version
+        run: echo "The latest release version is ${{ steps.latest-release.outputs.latest-release }}"
 
-    - name: Run tests
-      run: pytest  # Exécute les tests unitaires avec pytest
+      - name: Deploy application
+        run: |
+          echo "Deploying application version ${{ steps.latest-release.outputs.latest-release }}"
+          # Ajoutez ici votre script de déploiement ou toute autre commande utilisant la version récupérée
+
