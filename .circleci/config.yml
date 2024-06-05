@@ -7,13 +7,12 @@ jobs:
   test-python:
     # Install dependencies and run tests
     docker:
-      - image: cimg/python:3.8-node
+      - image: cimg/python:3.8  # Updated to use a Python-only image
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          # Cache dependencies to speed up builds
-          cache-version: v1
+          cache-version: v1  # Utilizing cache to speed up builds
       - run:
           name: Install pytest
           command: pip install pytest
@@ -31,8 +30,7 @@ jobs:
       - checkout
       - run:
           name: deploy
-          command: ./deploy.sh  # Assuming deploy.sh is executable and present in your repo
-          # Add necessary deployment configurations here
+          command: ./deploy.sh  # Ensure this script is executable and present in your repo
 
 workflows:
   build-and-test:
