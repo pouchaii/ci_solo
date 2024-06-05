@@ -23,3 +23,4 @@ def test_invalid_email():
     assert not is_valid_email("invalid@domain@domain.com")
     assert not is_valid_email("@missingusername.com")
     assert not is_valid_email("&2&é&@gmail.com")
+    
