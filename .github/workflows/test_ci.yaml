@@ -3,26 +3,27 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - main
+      - main  # Exécute le workflow pour les commits sur la branche 'main'
+  pull_request:
+    branches:
+      - main  # Exécute le workflow pour les pull requests vers la branche 'main'
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Utilise la dernière version d'Ubuntu disponible sur GitHub Actions
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3  # Assurez-vous que cette version est la dernière et qu'elle est compatible avec Node.js 20
 
-      - name: Fetch latest release version
-        id: latest-release
-        uses: reloc8/action-latest-release-version@1.0.0
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'  # Spécifie la version de Python à utiliser
 
-      - name: Set release version in environment
-        run: echo "LATEST_RELEASE=${{ steps.latest-release.outputs.latest-release }}" >> $GITHUB_ENV
-
-      - name: Print the latest release version
-        run: echo "The latest release version is $LATEST_RELEASE"
-
-      - name: Deploy application
+      - name: Install dependencies
         run: |
-          echo "Deploying application version $LATEST_RELEASE"
-          # Your deployment script here
+          python -m pip install --upgrade pip  # Met à jour pip
+          pip install pytest  # Installe pytest pour les tests
+
+      - name: Run tests
+        run: pytest  # Exécute les tests unitaires avec pytest
