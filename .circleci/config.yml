@@ -1,6 +1,8 @@
 version: 2.1
+
 orbs:
   python: circleci/python@2
+
 jobs:
   test-python:
     # Install dependencies and run tests
@@ -10,6 +12,8 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
+          # Cache dependencies to speed up builds
+          cache-version: v1
       - run:
           name: Install pytest
           command: pip install pytest
@@ -18,18 +22,22 @@ jobs:
           command: pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
       - store_test_results:
           path: junit.xml
+
   deploy:
-    # This is an example deploy job, not actually used by the workflow
+    # This is an example deploy job
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: deploy
-          command: '#e.g. ./deploy.sh'
+          command: ./deploy.sh  # Assuming deploy.sh is executable and present in your repo
+          # Add necessary deployment configurations here
+
 workflows:
   build-and-test:
     jobs:
       - test-python
-    # - deploy:
-    #     requires:
-    #       - test-python
+      - deploy:
+          requires:
+            - test-python
