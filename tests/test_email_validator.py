@@ -9,6 +9,13 @@ def test_valid_email():
     assert is_valid_email("first-last@domain.org")
     assert is_valid_email("12é3434@gmail.com")
 
+
+def test_complex_email():
+    """ Teste des adresses email complexes qui devraient être valides. """
+    assert  is_valid_email("user+mailbox@domain.com"), "Should handle plus sign in email"
+    assert  is_valid_email("user@sub.domain.co.uk"), "Should handle email with subdomains and UK domain"
+
+
 def test_invalid_email():
     """ Teste des adresses e-mail qui ne devraient pas être valides. """
     assert not is_valid_email("plainaddress")
