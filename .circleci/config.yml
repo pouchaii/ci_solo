@@ -37,7 +37,7 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - test-python
-      - deploy:
-          requires:
-            - test-python
+      - test-python:
+          filters:
+            branches:
+              only: main
