@@ -14,14 +14,23 @@ jobs:
             - v1-dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Install dependencies
-          command: pip install -r requirements.txt
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+            pip install pytest  # Assurez-vous que pytest est installé
       - save_cache:
           paths:
             - ~/.cache/pip
           key: v1-dependencies-{{ checksum "requirements.txt" }}
       - run:
+          name: Check installed packages
+          command: pip list
+      - run:
           name: Run tests
-          command: pytest --junitxml=junit.xml
+          command: |
+            . venv/bin/activate
+            pytest --junitxml=junit.xml
       - store_test_results:
           path: junit.xml
 
